@@ -76,19 +76,19 @@ class OrderItemsController < ApplicationController
     end
 
     def load_order
-      rails.logger session[:order_id]
-      #begin @order = Order.find_or_initialize_by_id(session[:order_id], status: "unsubmitted")
-      #  if @order.new_record?
-      #    @order.save!
-      #    session[:order_id] = @order.id
-      #  end
-      #end
-      begin
-        @order = Order.find(session[:order_id])
-      rescue ActiveRecord::RecordNotFound
-        @order = Order.create(status: "unsubmitted")
-        session[:order_id] = @order.id
+      logger.debug "<<<<<<<<<Session id is #{session[:order_id]}"
+      begin @order = Order.find_or_initialize_by(id: session[:order_id], status: "unsubmitted")
+        if @order.new_record?
+          @order.save!
+          session[:order_id] = @order.id
+        end
       end
+      #begin
+      #  @order = Order.find(session[:order_id])
+      #rescue ActiveRecord::RecordNotFound
+      #  @order = Order.create(status: "unsubmitted")
+      #  session[:order_id] = @order.id
+      #end
     end
 
 
